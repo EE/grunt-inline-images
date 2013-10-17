@@ -1,0 +1,45 @@
+{
+    "name": "grunt-inline-images",
+    "version": "0.0.1",
+    "description": "Change all URLs matching a pattern to inline base64 representations.",
+    "homepage": "https://github.com/EE/grunt-inline-images",
+    "author": {
+        "name": "Michał Gołębiowski",
+        "email": "m.goleb@gmail.com",
+        "url": "http://laboratorium.ee"
+    },
+    "keywords": [
+        "gruntplugin"
+    ],
+    "main": "Gruntfile.js",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/EE/grunt-inline-images.git"
+    },
+    "bugs": "https://github.com/EE/grunt-inline-images/issues",
+    "licenses": [
+        {
+            "type": "MIT"
+        }
+    ],
+    "dependencies": {
+        "http-sync": "~0.0.3"
+    },
+    "devDependencies": {
+        "grunt-contrib-clean": "~0.5.0",
+        "grunt-contrib-jshint": "~0.6.4",
+        "grunt-contrib-nodeunit": "~0.2.1",
+        "grunt-mocha-cli": "~1.0.1",
+        "load-grunt-tasks": "~0.1.0",
+        "should": "~1.2.2"
+    },
+    "peerDependencies": {
+        "grunt": "~0.4.1"
+    },
+    "scripts": {
+        "test": "grunt test"
+    },
+    "engines": {
+        "node": ">= 0.10.0"
+    }
+}
