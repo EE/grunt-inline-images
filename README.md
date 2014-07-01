@@ -2,6 +2,9 @@
 
 > Change all URLs matching a pattern to inline base64 representations.
 
+[![Build Status](https://travis-ci.org/EE/grunt-inline-images.svg?branch=master)](https://travis-ci.org/EE/grunt-inline-images)
+[![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
+
 ## Getting Started
 This plugin requires Grunt.
 
