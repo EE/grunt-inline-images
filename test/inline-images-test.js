@@ -6,14 +6,25 @@
  * Licensed under the MIT license.
  */
 
+'use strict';
+
+var fs = require('fs'),
+    expect = require('expect.js');
+
+function readFile(path) {
+    return fs.readFileSync(path, {encoding: 'utf8'});
+}
+
+function readTmp(filename) {
+    return readFile('test/tmp/' + filename);
+}
+
+function readFix(filename) {
+    return readFile('test/fixtures/' + filename);
+}
+
 describe('grunt-inline-images', function () {
-    'use strict';
-
-    var grunt = require('grunt');
-
     it('should inline images from toInline and change their URLs to about:blank from toDiscard', function () {
-        var expected = grunt.file.read('test/tmp/actual.json'),
-            actual = grunt.file.read('test/fixtures/expected.json');
-        expected.should.equal(actual);
+        expect(readTmp('actual.json')).to.be(readFix('expected.json'));
     });
 });

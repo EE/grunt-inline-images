@@ -17,24 +17,6 @@ module.exports = function (grunt) {
             },
         },
 
-        jshint: {
-            all: {
-                options: {
-                    jshintrc: '.jshintrc',
-                },
-                src: [
-                    'Gruntfile.js',
-                    'tasks/*.js',
-                ],
-            },
-            test: {
-                options: {
-                    jshintrc: 'test/.jshintrc',
-                },
-                src: ['<%= mochacli.tests %>'],
-            },
-        },
-
         // Configuration to be run (and then tested).
         inlineImages: {
             all: {
@@ -47,6 +29,7 @@ module.exports = function (grunt) {
                         '(player\\.|)vimeo\\.com/',
                         'youtube\\.com/',
                         'facebook\\.com/',
+
                     ],
                 },
                 files: {
@@ -56,12 +39,13 @@ module.exports = function (grunt) {
         },
 
         // Unit tests.
-        mochacli: {
-            options: {
-                require: ['should'],
-                bail: true
+        mochaTest: {
+            all: {
+                options: {
+                    reporter: 'spec',
+                },
+                src: ['test/*.js'],
             },
-            tests: ['test/*.js'],
         },
 
     });
@@ -72,13 +56,10 @@ module.exports = function (grunt) {
     // Actually load this plugin's task(s).
     grunt.loadTasks('tasks');
 
-    grunt.registerTask('test', ['mochacli']);
-
     // By default, lint and run all tests.
     grunt.registerTask('default', [
         'clean',
-        'jshint',
         'inlineImages',
-        'test',
+        'mochaTest',
     ]);
 };

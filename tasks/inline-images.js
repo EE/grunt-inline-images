@@ -8,43 +8,41 @@
 
 'use strict';
 
-module.exports = function (grunt) {
-    var httpSync = require('http-sync');
+var request = require('request'),
+    Promise = require('bluebird');
 
+module.exports = function (grunt) {
     function getRegexFromPattern(pattern) {
         return new RegExp('(\\\\"|")((?:http(?:s|):|)//(?:www\\.|)' + pattern + '[a-zA-Z0-9._?&=/\\-\\\\]+)(?:\\\\"|")',
             'g');
     }
 
     function getEncodedImage(url) {
-        var request, response,
-            urlParts = /([a-zA-Z]+):\/\/([a-zA-Z0-9._\-]+)(\/.*)/g.exec(url);
-        if (!urlParts) {
-            console.error('urlParts null!', url);
-            return url; // in case of URL mismatch return current URL
-        }
-        grunt.log.writeln('Downloading started...', url);
-        request = httpSync.request({
-            method: 'GET',
-            headers: {},
-            body: '',
-
-            protocol: urlParts[1] || 'http',
-            host: urlParts[2],
-            port: 80,
-            path: urlParts[3],
+        return new Promise(function (resolve, reject) {
+            grunt.log.writeln('Downloading started...', url);
+            request({
+                url: url,
+                encoding: null,
+                timeout: 10000,
+            }, function (error, response, body) {
+                if (error) {
+                    reject(new Error(error));
+                }
+                grunt.log.writeln('File downloaded!', url);
+                resolve('data:' + response.headers['content-type'] + ';base64,' + new Buffer(body).toString('base64'));
+            });
         });
-        request.setTimeout(10000, function () {
-            console.error('Request timed out!');
-            return url; // in case of network error return current URL
-        });
-        response = request.end();
-        grunt.log.writeln('File downloaded!', url);
-        return 'data:image/jpeg;base64,' + new Buffer(response.body).toString('base64');
     }
 
-    function replaceMatchWithBase64(match, delimiter, url) {
-        return delimiter + getEncodedImage(url) + delimiter;
+    function getBase64WrappedImage(match, delimiter, url) {
+        return getEncodedImage(url)
+            .then(function (encodedImage) {
+                return delimiter + encodedImage + delimiter;
+            })
+            .catch(function () {
+                // Fall back to the URL in case of an error.
+                return match;
+            });
     }
 
     function replaceMatchWithAboutBlank(match, delimiter) {
@@ -54,17 +52,20 @@ module.exports = function (grunt) {
     grunt.registerMultiTask('inlineImages',
         'Change all URLs matching a pattern to inline base64 representations.',
         function () {
-            var i, regex,
+            var i, regex, match,
+                done = this.async(),
                 options = this.options(),
                 toInline = options.toInline || [],
-                toDiscard = options.toDiscard || [];
+                toDiscard = options.toDiscard || [],
+                globalJobs = [];
 
             this.files.forEach(function (mapping) {
                 mapping.src.forEach(function (path) {
                     grunt.log.writeln(' ***** Processing file: ' + path + ' ***** ');
 
                     var dest,
-                        contents = grunt.file.read(path);
+                        contents = grunt.file.read(path),
+                        jobs = [];
 
                     if (mapping.dest) {
                         // If destination file not provided, write back to the source file.
@@ -87,14 +88,43 @@ module.exports = function (grunt) {
                     // Images are downloaded and inlined in base64 format.
                     for (i = 0; i < toInline.length; i++) {
                         regex = getRegexFromPattern(toInline[i]);
-                        contents = contents.replace(regex, replaceMatchWithBase64);
+                        while (match = regex.exec(contents)) {
+                            (function (match) {
+                                jobs.push(
+                                    getBase64WrappedImage(match[0], match[1], match[2])
+                                        .then(function (base64Image) {
+                                            contents = contents.replace(match[0], base64Image);
+                                        })
+                                        .catch(function (err) {
+                                            throw err;
+                                        })
+                                );
+                            })(match);
+                        }
                     }
 
-                    // Write transformed contents back into the file.
-                    grunt.file.write(dest, contents);
-                    grunt.log.writeln(' ***** File: ' + path + ' processed; output written to: ' + dest + ' ***** ');
+                    globalJobs.push(
+                        Promise.all(jobs)
+                            .then(function () {
+                                // Write transformed contents back into the file.
+                                grunt.file.write(dest, contents);
+                                grunt.log.writeln(' ***** File: ' + path + ' processed; output written to: '
+                                    + dest + ' ***** ');
+                            })
+                            .catch(function (err) {
+                                throw err;
+                            })
+                    );
                 });
             });
+
+            Promise.all(globalJobs)
+                .then(function () {
+                    done();
+                })
+                .catch(function () {
+                    done(false);
+                });
         }
     );
 };
