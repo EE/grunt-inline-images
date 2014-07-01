@@ -17,6 +17,29 @@ module.exports = function (grunt) {
             },
         },
 
+        eslint: {
+            all: {
+                src: [
+                    'Gruntfile.js',
+                    'tasks',
+                    'test',
+                ],
+            },
+        },
+
+        jscs: {
+            all: {
+                src: [
+                    'Gruntfile.js',
+                    'tasks/**/*.js',
+                    'test/**/*.js',
+                ],
+                options: {
+                    config: '.jscsrc',
+                },
+            },
+        },
+
         // Configuration to be run (and then tested).
         inlineImages: {
             all: {
@@ -56,9 +79,15 @@ module.exports = function (grunt) {
     // Actually load this plugin's task(s).
     grunt.loadTasks('tasks');
 
+    grunt.registerTask('lint', [
+        'eslint',
+        'jscs',
+    ]);
+
     // By default, lint and run all tests.
     grunt.registerTask('default', [
         'clean',
+        'lint',
         'inlineImages',
         'mochaTest',
     ]);

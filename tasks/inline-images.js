@@ -85,21 +85,25 @@ module.exports = function (grunt) {
                         contents = contents.replace(regex, replaceMatchWithAboutBlank);
                     }
 
+                    function replaceMatchWithBase64(match) {
+                        jobs.push(
+                            getBase64WrappedImage(match[0], match[1], match[2])
+                                .then(function (base64Image) {
+                                    contents = contents.replace(match[0], base64Image);
+                                })
+                                .catch(function (err) {
+                                    throw err;
+                                })
+                        );
+                    }
+
                     // Images are downloaded and inlined in base64 format.
                     for (i = 0; i < toInline.length; i++) {
                         regex = getRegexFromPattern(toInline[i]);
-                        while (match = regex.exec(contents)) {
-                            (function (match) {
-                                jobs.push(
-                                    getBase64WrappedImage(match[0], match[1], match[2])
-                                        .then(function (base64Image) {
-                                            contents = contents.replace(match[0], base64Image);
-                                        })
-                                        .catch(function (err) {
-                                            throw err;
-                                        })
-                                );
-                            })(match);
+                        match = regex.exec(contents);
+                        while (match) {
+                            replaceMatchWithBase64(match);
+                            match = regex.exec(contents);
                         }
                     }
 
