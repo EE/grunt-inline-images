@@ -26,10 +26,14 @@ module.exports = function (grunt) {
                 timeout: 10000,
             }, function (error, response, body) {
                 if (error) {
-                    reject(new Error(error));
+                    grunt.log.error('Error when downloading ' + url + ': ', error.message);
+                    grunt.log.writeln('The URL will be kept intact');
+                    grunt.log.writeln(error.stack);
+                    return reject(error);
                 }
                 grunt.log.writeln('File downloaded!', url);
-                resolve('data:' + response.headers['content-type'] + ';base64,' + new Buffer(body).toString('base64'));
+                resolve('data:' + (response.headers['content-type'] || 'image/jpeg') + ';base64,' +
+                    new Buffer(body).toString('base64'));
             });
         });
     }
