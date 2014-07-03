@@ -3,7 +3,7 @@
 > Change all URLs matching a pattern to inline base64 representations.
 
 [![Build Status](https://travis-ci.org/EE/grunt-inline-images.svg?branch=master)](https://travis-ci.org/EE/grunt-inline-images)
-[![Build status](https://ci.appveyor.com/api/projects/status/yirkyol8q8ikqlft/branch/master)](https://ci.appveyor.com/project/mzgol/grunt-ng-annotate)
+[![Build status](https://ci.appveyor.com/api/projects/status/yirkyol8q8ikqlft/branch/master)](https://ci.appveyor.com/project/EE/grunt-inline-images)
 [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
 
 ## Getting Started
