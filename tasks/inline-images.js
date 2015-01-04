@@ -74,14 +74,13 @@ module.exports = function (grunt) {
                         jobs = [];
 
                     if (mapping.dest) {
-                        // If destination file not provided, write back to the source file.
-                        // NOTE: only one source file per destination is supported.
                         if (mapping.src.length !== 1) {
                             grunt.log.error('Only one source file per destination is supported!');
                             return false;
                         }
                         dest = mapping.dest;
                     } else {
+                        // If destination file not provided, write back to the source file.
                         dest = path;
                     }
 
