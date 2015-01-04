@@ -46,7 +46,7 @@ module.exports = function (grunt) {
                 options: {
                     toInline: [ // beginnings of URLs to images to be inlined in a base64 representation
                         'example.com/',
-                        'gravatar\\.com/',
+                        'raw\\.githubusercontent\\.com/',
                     ],
                     toDiscard: [ // beginnings of URLs to be changed to "about:blank"
                         '(player\\.|)vimeo\\.com/',
