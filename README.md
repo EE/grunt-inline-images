@@ -1,6 +1,6 @@
 # grunt-inline-images
 
-> Change all URLs matching a pattern to inline base64 representations.
+> Change all URLs matching a pattern to inline base64 representations or about:blank.
 
 [![Build Status](https://travis-ci.org/EE/grunt-inline-images.svg?branch=master)](https://travis-ci.org/EE/grunt-inline-images)
 [![Build status](https://ci.appveyor.com/api/projects/status/yirkyol8q8ikqlft/branch/master)](https://ci.appveyor.com/project/mzgol/grunt-inline-images/branch/master)
@@ -60,7 +60,34 @@ The `inlineImages` task accepts a couple of options:
 
 ### Usage Examples
 
-TODO
+```js
+'use strict';
+
+grunt.initConfig({
+    inlineImages: {
+        all: {
+            options: {
+                toInline: [ // beginnings of URLs to images to be inlined in a base64 representation
+                    'example.com/',
+                    'raw\\.githubusercontent\\.com/',
+                ],
+                toDiscard: [ // beginnings of URLs to be changed to "about:blank"
+                    '(player\\.|)vimeo\\.com/',
+                    'youtube\\.com/',
+                    'facebook\\.com/',
+                ],
+            },
+            files: {
+                'test/tmp/actual.json': ['test/fixtures/input.json'],
+            },
+        },
+    },
+});
+
+grunt.loadNpmTasks('grunt-inline-images');
+```
+
+You can see an example input file in [test/fixtures/input.json](test/fixtures/input.json) and the transformed output file in [test/fixtures/expected.json](test/fixtures/expected.json).
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
