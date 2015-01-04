@@ -52,7 +52,6 @@ module.exports = function (grunt) {
                         '(player\\.|)vimeo\\.com/',
                         'youtube\\.com/',
                         'facebook\\.com/',
-
                     ],
                 },
                 files: {
