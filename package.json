@@ -1,6 +1,6 @@
 {
   "name": "grunt-inline-images",
-  "version": "0.1.0",
+  "version": "0.1.1-pre",
   "description": "Change all URLs matching a pattern to inline base64 representations.",
   "homepage": "https://github.com/EE/grunt-inline-images",
   "author": {
