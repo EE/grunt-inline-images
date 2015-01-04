@@ -8,8 +8,10 @@
 
 'use strict';
 
+/* eslint-disable no-undef */
 var request = require('request'),
     Promise = require('bluebird');
+/* eslint-enable no-undef */
 
 module.exports = function (grunt) {
     function getRegexFromPattern(pattern) {
