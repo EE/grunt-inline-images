@@ -16,11 +16,7 @@
     "url": "https://github.com/EE/grunt-inline-images.git"
   },
   "bugs": "https://github.com/EE/grunt-inline-images/issues",
-  "licenses": [
-    {
-      "type": "MIT"
-    }
-  ],
+  "license": "MIT",
   "files": [
     "tasks"
   ],
