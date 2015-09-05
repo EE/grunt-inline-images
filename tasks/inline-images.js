@@ -15,7 +15,9 @@ var request = require('request'),
 
 module.exports = function (grunt) {
     function getRegexFromPattern(pattern) {
-        return new RegExp('(\\\\"|")((?:http(?:s|):|)//(?:www\\.|)' + pattern + '[a-zA-Z0-9._?&=/\\-\\\\]+)(?:\\\\"|")',
+        return new RegExp(
+            '(\\\\"|")((?:http(?:s|):|)//(?:www\\.|)' +
+                pattern + '[a-zA-Z0-9._?&=/\\-\\\\]+)(?:\\\\"|")',
             'g');
     }
 
@@ -51,7 +53,7 @@ module.exports = function (grunt) {
             });
     }
 
-    function replaceMatchWithAboutBlank(match, delimiter) {
+    function replaceMatchWithAboutBlank(_match, delimiter) {
         return delimiter + 'about:blank' + delimiter;
     }
 
@@ -117,7 +119,8 @@ module.exports = function (grunt) {
                             .then(function () {
                                 // Write transformed contents back into the file.
                                 grunt.file.write(dest, contents);
-                                grunt.log.writeln(' ***** File: ' + path + ' processed; output written to: '
+                                grunt.log.writeln(' ***** File: ' +
+                                    path + ' processed; output written to: '
                                     + dest + ' ***** ');
                             })
                             .catch(function (err) {

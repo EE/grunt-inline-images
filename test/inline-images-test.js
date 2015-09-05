@@ -24,7 +24,8 @@ function readFix(filename) {
 }
 
 describe('grunt-inline-images', function () {
-    it('should inline images from toInline and change their URLs to about:blank from toDiscard', function () {
+    it('should inline images from toInline and change their URLs to about:blank from toDiscard',
+            function () {
         expect(JSON.parse(readTmp('actual.json'))).to.eql(JSON.parse(readFix('expected.json')));
     });
 });
