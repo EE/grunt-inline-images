@@ -9,13 +9,12 @@
 'use strict';
 
 const request = require('request');
+const urlRegex = require('url-regex');
 
 module.exports = grunt => {
-    const getRegexFromPattern = pattern =>
-        new RegExp(
-            `(\\\\"|")((?:http(?:s|):|)//(?:www\\.|)${
-                pattern }[a-zA-Z0-9._?&=/\\-\\\\]+)(?:\\\\"|")`,
-            'g');
+    const getRegexFromPattern = pattern => new RegExp(`(?:http(?:s|):|)//(?:www\\.|)${ pattern }`);
+
+    const isUrl = string => typeof string === 'string' && urlRegex({exact: true}).test(string);
 
     const getEncodedImage = url =>
         new Promise((resolve, reject) => {
@@ -37,19 +36,53 @@ module.exports = grunt => {
             });
         });
 
-    const getBase64WrappedImage = (match, delimiter, url) =>
-        getEncodedImage(url)
-            .then(encodedImage => `${ delimiter }${ encodedImage }${ delimiter }`)
-            // Fall back to the URL in case of an error.
-            .catch(() => match);
+    // TODO switch to destructuring when Node 5 arrives.
+//    const transformObject = ({object, toInline, toDiscard, jobs}) => {
+    const transformObject = params => {
+        const object = params.object;
+        const toInline = params.toInline;
+        const toDiscard = params.toDiscard;
+        const jobs = params.jobs;
 
-    const replaceMatchWithAboutBlank = (_match, delimiter) =>
-        `${ delimiter }about:blank${ delimiter }`;
+        const transform = obj => transformObject({
+            object: obj,
+            toInline, toDiscard, jobs,
+        });
+
+        const newObject = {};
+        for (const key in object) {
+            const value = object[key];
+            if (typeof value === 'object' && value != null) {
+                newObject[key] = transform(value);
+            } else if (isUrl(value)) {
+                for (const pattern of toDiscard) {
+                    if (getRegexFromPattern(pattern).test(value)) {
+                        newObject[key] = 'about:blank';
+                        break;
+                    }
+                }
+                for (const pattern of toInline) {
+                    if (getRegexFromPattern(pattern).test(value)) {
+                        jobs.push(
+                            getEncodedImage(value)
+                                .then(encodedValue => {
+                                    newObject[key] = encodedValue;
+                                })
+                        );
+                        // Don't download the same file twice.
+                        break;
+                    }
+                }
+            } else {
+                newObject[key] = value;
+            }
+        }
+        return newObject;
+    };
 
     grunt.registerMultiTask('inlineImages',
         'Change all URLs matching a pattern to inline base64 representations.',
         function () {
-            let regex, match;
             const done = this.async();
 
             // TODO switch to destructuring when Node 5 arrives.
@@ -65,7 +98,7 @@ module.exports = grunt => {
                     grunt.log.writeln(` ***** Processing file: ${ path } ***** `);
 
                     let dest;
-                    let contents = grunt.file.read(path);
+                    const object = grunt.file.readJSON(path);
                     const jobs = [];
 
                     if (mapping.dest) {
@@ -79,41 +112,13 @@ module.exports = grunt => {
                         dest = path;
                     }
 
-                    // Some URLs are changed to "about:blank".
-                    for (const pattern of toDiscard) {
-                        regex = getRegexFromPattern(pattern);
-                        contents = contents.replace(regex, replaceMatchWithAboutBlank);
-                    }
-
-                    // TODO switch to destructuring when Node 5 arrives.
-//                    const replaceMatchWithBase64 = ([match, delimiter, url]) => {
-                    const replaceMatchWithBase64 = params => {
-                        const match = params[0];
-                        const delimiter = params[1];
-                        const url = params[2];
-                        jobs.push(
-                            getBase64WrappedImage(match, delimiter, url)
-                                .then(base64Image => {
-                                    contents = contents.replace(match, base64Image);
-                                })
-                        );
-                    };
-
-                    // Images are downloaded and inlined in base64 format.
-                    for (const pattern of toInline) {
-                        regex = getRegexFromPattern(pattern);
-                        match = regex.exec(contents);
-                        while (match) {
-                            replaceMatchWithBase64(match);
-                            match = regex.exec(contents);
-                        }
-                    }
+                    const newObject = transformObject({object, toInline, toDiscard, jobs});
 
                     globalJobs.push(
                         Promise.all(jobs)
                             .then(() => {
                                 // Write transformed contents back into the file.
-                                grunt.file.write(dest, contents);
+                                grunt.file.write(dest, JSON.stringify(newObject, null, 4));
                                 grunt.log.writeln(` ***** File: ${
                                     path } processed; output written to: ${
                                     dest } ***** `);

@@ -152,9 +152,6 @@ module.exports = function (grunt) {
     // Load all grunt tasks matching the `grunt-*` pattern.
     require('load-grunt-tasks')(grunt);
 
-    // Actually load this plugin's task.
-    grunt.loadTasks('tasks');
-
     grunt.registerTask('lint', [
         'eslint',
         'jscs',
@@ -167,12 +164,20 @@ module.exports = function (grunt) {
         'babel',
     ]);
 
+    grunt.registerTask('inlineImagesWrapped', function () {
+        // Actually load this plugin's task...
+        grunt.loadTasks('tasks');
+        // ...and run it! It might not have existed before so we needed to delay it.
+        grunt.task.run('inlineImages');
+    });
+
+
     // By default, lint and run all tests.
     grunt.registerTask('default', [
         'clean',
         'lint',
         'build',
-        'inlineImages',
+        'inlineImagesWrapped',
         'mochaTest',
     ]);
 };
