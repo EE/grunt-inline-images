@@ -8,24 +8,15 @@
 
 'use strict';
 
-var fs = require('fs'),
-    expect = require('expect.js');
+const fs = require('fs');
+const expect = require('expect.js');
 
-function readFile(path) {
-    return fs.readFileSync(path, {encoding: 'utf8'});
-}
+const readFile = path => fs.readFileSync(`${ __dirname }/${ path }`, {encoding: 'utf8'});
+const readTmp = filename => readFile(`tmp/${ filename }`);
+const readFix = filename => readFile(`fixtures/${ filename }`);
 
-function readTmp(filename) {
-    return readFile('test/tmp/' + filename);
-}
-
-function readFix(filename) {
-    return readFile('test/fixtures/' + filename);
-}
-
-describe('grunt-inline-images', function () {
-    it('should inline images from toInline and change their URLs to about:blank from toDiscard',
-            function () {
+describe('grunt-inline-images', () => {
+    it('should inline images from toInline & change URLs to about:blank from toDiscard', () => {
         expect(JSON.parse(readTmp('actual.json'))).to.eql(JSON.parse(readFix('expected.json')));
     });
 });
