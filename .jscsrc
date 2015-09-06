@@ -56,10 +56,5 @@
 
     "excludeFiles": [
         "node_modules/**"
-    ],
-
-    "plugins": ["jscs-trailing-comma"],
-
-    "requireTrailingCommaInExpandedLiterals": true,
-    "disallowTrailingCommaInCollapsedLiterals": true
+    ]
 }
