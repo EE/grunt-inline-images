@@ -10,6 +10,7 @@
 
 const request = require('request');
 const urlRegex = require('url-regex');
+const detectJsonIndent = require('detect-json-indent');
 
 module.exports = grunt => {
     const getRegexFromPattern = pattern => new RegExp(`(?:http(?:s|):|)//(?:www\\.|)${ pattern }`);
@@ -98,7 +99,9 @@ module.exports = grunt => {
                     grunt.log.writeln(` ***** Processing file: ${ path } ***** `);
 
                     let dest;
-                    const object = grunt.file.readJSON(path);
+                    const contents = grunt.file.read(path);
+                    const indent = detectJsonIndent(contents);
+                    const object = JSON.parse(contents);
                     const jobs = [];
 
                     if (mapping.dest) {
@@ -118,7 +121,7 @@ module.exports = grunt => {
                         Promise.all(jobs)
                             .then(() => {
                                 // Write transformed contents back into the file.
-                                grunt.file.write(dest, JSON.stringify(newObject, null, 4));
+                                grunt.file.write(dest, JSON.stringify(newObject, null, indent));
                                 grunt.log.writeln(` ***** File: ${
                                     path } processed; output written to: ${
                                     dest } ***** `);

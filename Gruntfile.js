@@ -132,7 +132,8 @@ module.exports = function (grunt) {
                     ],
                 },
                 files: {
-                    'dist/test/tmp/actual.json': ['dist/test/fixtures/input.json'],
+                    'dist/test/tmp/actual1.json': ['dist/test/fixtures/input1.json'],
+                    'dist/test/tmp/actual2.json': ['dist/test/fixtures/input2.json'],
                 },
             },
         },

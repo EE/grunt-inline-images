@@ -21,6 +21,7 @@
     "tasks"
   ],
   "dependencies": {
+    "detect-json-indent": "^0.0.0",
     "request": "^2.61.0",
     "url-regex": "^3.0.0"
   },

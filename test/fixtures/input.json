@@ -1,8 +1,0 @@
-{
-    "vimeo": "http://player.vimeo.com/example-video",
-    "nested": {
-        "youtube": "http://youtube.com/watch?v=BY2igj_LbJ4",
-        "youtubeWww": "http://www.youtube.com/watch?v=BY2igj_LbJ4",
-        "github": "https://raw.githubusercontent.com/EE/grunt-inline-images/master/test/mona-lisa.jpg"
-    }
-}
