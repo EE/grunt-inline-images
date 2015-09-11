@@ -106,15 +106,6 @@ module.exports = function (grunt) {
             },
         },
 
-        jscs: {
-            all: {
-                src: '<%= eslint.all.tasks =>',
-                options: {
-                    config: '.jscsrc',
-                },
-            },
-        },
-
         // Configuration to be run (and then tested).
         inlineImages: {
             all: {
@@ -155,7 +146,6 @@ module.exports = function (grunt) {
 
     grunt.registerTask('lint', [
         'eslint',
-        'jscs',
     ]);
 
     // In modern Node.js we just use the non-transpiled source as it makes it easier to debug;
