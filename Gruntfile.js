@@ -24,6 +24,7 @@ module.exports = function (grunt) {
             test: {
                 src: [
                     'dist',
+                    'test/tmp/*',
                 ],
             },
         },
@@ -34,7 +35,7 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         src: [
-                            'test/**/*',
+                            'test/**/{*,.*}',
                             '!test/**/*.js',
                         ],
                         dest: 'dist',
@@ -46,7 +47,7 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         src: [
-                            'tmp',
+                            'test/tmp/**/*',
                         ],
                         dest: 'dist',
                     },
