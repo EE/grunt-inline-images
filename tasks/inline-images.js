@@ -15,7 +15,7 @@
 var semver = require('semver');
 
 module.exports = function (grunt) {
-    if (semver.satisfies(process.version, '>=4.0.0')) {
+    if (semver(process.version).major >= 4) {
         return require('../src/inline-images')(grunt);
     }
     return require('../dist/src/inline-images')(grunt);

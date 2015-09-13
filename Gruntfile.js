@@ -13,6 +13,10 @@
 /* eslint-disable no-var, object-shorthand, prefer-arrow-callback, prefer-const,
  prefer-spread, prefer-reflect, prefer-template */
 
+var semver = require('semver');
+
+var newNode = semver(process.version).major >= 4;
+
 module.exports = function (grunt) {
     // Project configuration.
     grunt.initConfig({
@@ -25,13 +29,24 @@ module.exports = function (grunt) {
         },
 
         copy: {
-            all: {
+            nonGenerated: {
                 files: [
                     {
                         expand: true,
                         src: [
                             'test/**/*',
                             '!test/**/*.js',
+                        ],
+                        dest: 'dist',
+                    },
+                ],
+            },
+            generated: {
+                files: [
+                    {
+                        expand: true,
+                        src: [
+                            'tmp',
                         ],
                         dest: 'dist',
                     },
@@ -124,8 +139,8 @@ module.exports = function (grunt) {
                     ],
                 },
                 files: {
-                    'dist/test/tmp/actual1.json': ['dist/test/fixtures/input1.json'],
-                    'dist/test/tmp/actual2.json': ['dist/test/fixtures/input2.json'],
+                    'test/tmp/actual1.json': ['test/fixtures/input1.json'],
+                    'test/tmp/actual2.json': ['test/fixtures/input2.json'],
                 },
             },
         },
@@ -136,7 +151,7 @@ module.exports = function (grunt) {
                 options: {
                     reporter: 'spec',
                 },
-                src: ['dist/test/*.js'],
+                src: [newNode ? 'test/*.js' : 'dist/test/*.js'],
             },
         },
 
@@ -152,7 +167,7 @@ module.exports = function (grunt) {
     // In modern Node.js we just use the non-transpiled source as it makes it easier to debug;
     // in older version we transpile (but keep the lines).
     grunt.registerTask('build', [
-        'copy',
+        'copy:nonGenerated',
         'babel',
     ]);
 
@@ -160,7 +175,10 @@ module.exports = function (grunt) {
         // Actually load this plugin's task...
         grunt.loadTasks('tasks');
         // ...and run it! It might not have existed before so we needed to delay it.
-        grunt.task.run('inlineImages');
+        grunt.task.run([
+            'inlineImages',
+            'copy:generated',
+        ]);
     });
 
 
