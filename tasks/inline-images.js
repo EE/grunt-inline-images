@@ -8,15 +8,16 @@
 
 'use strict';
 
-// Disable options that don't work in Node.js 0.12.
 // Gruntfile.js & tasks/*.js are the only non-transpiled files.
-/* eslint-disable no-var */
+/* eslint-disable no-var, no-eval */
 
-var semver = require('semver');
+var assert = require('assert');
 
 module.exports = function (grunt) {
-    if (semver(process.version).major >= 4) {
+    try {
+        assert.strictEqual(eval('(() => 2)()'), 2);
         return require('../src/inline-images')(grunt);
+    } catch (e) {
+        return require('../dist/src/inline-images')(grunt);
     }
-    return require('../dist/src/inline-images')(grunt);
 };
