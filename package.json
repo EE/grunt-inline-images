@@ -26,7 +26,6 @@
     "url-regex": "^3.0.0"
   },
   "devDependencies": {
-    "babel-core": "5.8.24",
     "eslint-config-mzgol": "0.0.3",
     "expect.js": "0.3.1",
     "grunt": "0.4.5",
