@@ -18,7 +18,9 @@
   "bugs": "https://github.com/EE/grunt-inline-images/issues",
   "license": "MIT",
   "files": [
-    "tasks"
+    "tasks",
+    "src",
+    "dist/src"
   ],
   "dependencies": {
     "detect-json-indent": "^0.0.0",
