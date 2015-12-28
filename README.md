@@ -3,7 +3,7 @@
 > Change all URLs matching a pattern to inline base64 representations or about:blank.
 
 [![Travis build Status](https://travis-ci.org/EE/grunt-inline-images.svg?branch=master)](https://travis-ci.org/EE/grunt-inline-images)
-[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/yirkyol8q8ikqlft/branch/master?svg=true)](https://ci.appveyor.com/project/mzgol/grunt-inline-images/branch/master)
+[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/yirkyol8q8ikqlft/branch/master?svg=true)](https://ci.appveyor.com/project/mgol/grunt-inline-images/branch/master)
 [![Version](https://img.shields.io/npm/v/grunt-inline-images.svg?style=flat-square)](http://npm.im/grunt-inline-images)
 [![Downloads](https://img.shields.io/npm/dm/grunt-inline-images.svg?style=flat-square)](http://npm-stat.com/charts.html?package=grunt-inline-images)
 [![MIT License](https://img.shields.io/npm/l/grunt-inline-images.svg?style=flat-square)](http://opensource.org/licenses/MIT)
