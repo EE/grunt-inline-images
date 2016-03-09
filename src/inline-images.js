@@ -29,7 +29,8 @@ module.exports = grunt => {
                     grunt.log.error(`Error when downloading ${ url }: ${ error.message }`);
                     grunt.log.writeln('The URL will be kept intact');
                     grunt.log.writeln(error.stack);
-                    return reject(error);
+                    reject(error);
+                    return;
                 }
                 grunt.log.writeln('File downloaded!', url);
                 resolve(`data:${ response.headers['content-type'] || 'image/jpeg' };base64,${
@@ -106,8 +107,7 @@ module.exports = grunt => {
 
                     if (mapping.dest) {
                         if (mapping.src.length !== 1) {
-                            grunt.log.error('Only one source file per destination is supported!');
-                            return false;
+                            grunt.fail.fatal('Only one source file per destination is supported!');
                         }
                         dest = mapping.dest;
                     } else {
