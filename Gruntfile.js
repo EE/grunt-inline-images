@@ -8,76 +8,13 @@
 
 'use strict';
 
-// Disable options that don't work in Node.js 0.12.
-// Gruntfile.js & tasks/*.js are the only non-transpiled files.
-/* eslint-disable no-var, object-shorthand, prefer-arrow-callback, prefer-const,
- prefer-spread, prefer-reflect, prefer-template */
-
-var assert = require('assert');
-
-var newNode;
-try {
-    assert.strictEqual(eval('(r => [...r])([2])[0]'), 2); // eslint-disable-line no-eval
-    newNode = true;
-} catch (e) {
-    newNode = false;
-}
-
 module.exports = function (grunt) {
     // Project configuration.
     grunt.initConfig({
         clean: {
             test: {
                 src: [
-                    'dist',
                     'test/tmp/*',
-                ],
-            },
-        },
-
-        copy: {
-            nonGenerated: {
-                files: [
-                    {
-                        expand: true,
-                        dot: true,
-                        src: [
-                            'test/**/*',
-                            '!test/**/*.js',
-                        ],
-                        dest: 'dist',
-                    },
-                ],
-            },
-            generated: {
-                files: [
-                    {
-                        expand: true,
-                        dot: true,
-                        src: [
-                            'test/tmp/**/*',
-                        ],
-                        dest: 'dist',
-                    },
-                ],
-            },
-        },
-
-        babel: {
-            options: {
-                sourceMap: 'inline',
-                retainLines: true,
-            },
-            all: {
-                files: [
-                    {
-                        expand: true,
-                        src: [
-                            'src/**/*.js',
-                            'test/**/*.js',
-                        ],
-                        dest: 'dist',
-                    },
                 ],
             },
         },
@@ -121,7 +58,7 @@ module.exports = function (grunt) {
                 options: {
                     reporter: 'spec',
                 },
-                src: [newNode ? 'test/*.js' : 'dist/test/*.js'],
+                src: ['test/*.js'],
             },
         },
 
@@ -130,34 +67,18 @@ module.exports = function (grunt) {
     // Load all grunt tasks matching the `grunt-*` pattern.
     require('load-grunt-tasks')(grunt);
 
+    // Actually load this plugin's task...
+    grunt.loadTasks('tasks');
+
     grunt.registerTask('lint', [
         'eslint',
     ]);
-
-    // In modern Node.js we just use the non-transpiled source as it makes it easier to debug;
-    // in older version we transpile (but keep the lines).
-    grunt.registerTask('build', [
-        'copy:nonGenerated',
-        'babel',
-    ]);
-
-    grunt.registerTask('inlineImagesWrapped', function () {
-        // Actually load this plugin's task...
-        grunt.loadTasks('tasks');
-        // ...and run it! It might not have existed before so we needed to delay it.
-        grunt.task.run([
-            'inlineImages',
-            'copy:generated',
-        ]);
-    });
-
 
     // By default, lint and run all tests.
     grunt.registerTask('default', [
         'clean',
         'lint',
-        'build',
-        'inlineImagesWrapped',
+        'inlineImages',
         'mochaTest',
     ]);
 };
