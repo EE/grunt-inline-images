@@ -99,4 +99,4 @@ This project aims to support all Node.js LTS versions in the "active" phase (see
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## License
-Copyright (c) 2013 Laboratorium EE. Licensed under the MIT license.
+Copyright (c) 2013 Laboratorium EE, 2016 Michał Gołębiowski-Owczarek. Licensed under the MIT license.
