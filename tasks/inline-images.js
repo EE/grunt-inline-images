@@ -2,7 +2,7 @@
  * grunt-inline-images
  * https://github.com/EE/grunt-inline-images
  *
- * Author Michał Gołębiowski <michal.golebiowski@laboratorium.ee>
+ * Author Michał Gołębiowski-Owczarek <michal.golebiowski@laboratorium.ee>
  * Licensed under the MIT license.
  */
 

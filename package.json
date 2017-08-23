@@ -4,7 +4,7 @@
   "description": "Change all URLs matching a pattern to inline base64 representations.",
   "homepage": "https://github.com/EE/grunt-inline-images",
   "author": {
-    "name": "Michał Gołębiowski",
+    "name": "Michał Gołębiowski-Owczarek",
     "email": "m.goleb@gmail.com",
     "url": "http://laboratorium.ee"
   },
