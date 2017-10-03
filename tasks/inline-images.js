@@ -34,12 +34,12 @@ module.exports = grunt => {
                 }
                 grunt.log.writeln('File downloaded!', url);
                 resolve(`data:${ response.headers['content-type'] || 'image/jpeg' };base64,${
-                    new Buffer(body).toString('base64') }`);
+                    Buffer.from(body).toString('base64') }`);
             });
         });
 
     // TODO switch to destructuring when Node.js 4 support is dropped.
-//    const transformObject = ({object, toInline, toDiscard, jobs}) => {
+    // const transformObject = ({object, toInline, toDiscard, jobs}) => {
     const transformObject = params => {
         const object = params.object;
         const toInline = params.toInline;
@@ -48,7 +48,9 @@ module.exports = grunt => {
 
         const transform = obj => transformObject({
             object: obj,
-            toInline, toDiscard, jobs,
+            toInline,
+            toDiscard,
+            jobs,
         });
 
         const newObject = {};
@@ -88,7 +90,7 @@ module.exports = grunt => {
             const done = this.async();
 
             // TODO switch to destructuring when Node.js 4 support is dropped.
-//            const {toInline = [], toDiscard = []} = this.options();
+            // const {toInline = [], toDiscard = []} = this.options();
             const options = this.options();
             const toInline = options.toInline || [];
             const toDiscard = options.toDiscard || [];
