@@ -93,7 +93,7 @@ grunt.loadNpmTasks('grunt-inline-images');
 You can see an example input file in [test/fixtures/input.json](test/fixtures/input.json) and the transformed output file in [test/fixtures/expected.json](test/fixtures/expected.json).
 
 ## Supported Node.js versions
-This project aims to support all supported Node.js LTS versions (see [LTS README](https://github.com/nodejs/LTS/blob/master/README.md) for more details) as well as the latest stable Node.js.
+This project aims to support all Node.js versions supported upstream (see [Release README](https://github.com/nodejs/Release/blob/master/README.md) for more details).
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
