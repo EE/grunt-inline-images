@@ -71,7 +71,7 @@ module.exports = grunt => {
                             getEncodedImage(value)
                                 .then(encodedValue => {
                                     newObject[key] = encodedValue;
-                                })
+                                }),
                         );
                         // Don't download the same file twice.
                         break;
@@ -127,7 +127,7 @@ module.exports = grunt => {
                                 grunt.log.writeln(` ***** File: ${
                                     path } processed; output written to: ${
                                     dest } ***** `);
-                            })
+                            }),
                     );
                 });
             });
@@ -139,6 +139,6 @@ module.exports = grunt => {
                 .catch(() => {
                     done(false);
                 });
-        }
+        },
     );
 };
