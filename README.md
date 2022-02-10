@@ -2,6 +2,8 @@
 
 > Change all URLs matching a pattern to inline base64 representations or about:blank.
 
+**NOTE: `grunt-inline-images` is no longer maintained. Please look for replacements.**
+
 [![Travis build Status](https://travis-ci.org/EE/grunt-inline-images.svg?branch=master)](https://travis-ci.org/EE/grunt-inline-images)
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/yirkyol8q8ikqlft/branch/master?svg=true)](https://ci.appveyor.com/project/mgol/grunt-inline-images/branch/master)
 [![Version](https://img.shields.io/npm/v/grunt-inline-images.svg?style=flat-square)](http://npm.im/grunt-inline-images)
